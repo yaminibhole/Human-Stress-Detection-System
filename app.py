@@ -324,9 +324,9 @@ def feedback_tab():
 
     st.markdown(
         """
-        \nWe'd love to hear your thoughts and suggestions on Stress Detection Explorer! Your feedback helps us improve and enhance the platform to better serve your needs. Whether it's a feature request, bug report, or general comment, we value your input and appreciate your contribution to making Stress Detection Explorer even better.
+        \nI'd love to hear your thoughts and suggestions on Stress Detection System! Your feedback helps me improve and enhance the platform to better serve your needs. Whether it's a feature request, bug report, or general comment, we value your input and appreciate your contribution to making Stress Detection System even better.
 
-        \nPlease share your feedback in the form below. Thank you for helping us create a more user-friendly and effective Stress Detection Explorer!
+        \nPlease share your feedback in the form below. Thank you !!
         """,
         unsafe_allow_html=True,
     )
