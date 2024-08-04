@@ -3,3 +3,4 @@ pandas
 scikit-learn
 Pillow
 google-generativeai
+python-dotenv
