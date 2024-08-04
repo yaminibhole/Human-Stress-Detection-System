@@ -7,7 +7,7 @@ import google.generativeai as genai
 from google.generativeai import chat
 
 # Configure the API key and generative model
-api_key = 'AIzaSyDUQCh5iB2ZGvefuc1QAMHhQ1Q5bNLL9MQ'# Enter you API KEY
+api_key = 'Your api key'# Enter you API KEY
 genai.configure(api_key=api_key)
 
 generation_config = {
