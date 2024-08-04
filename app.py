@@ -6,8 +6,20 @@ from PIL import Image
 import google.generativeai as genai
 from google.generativeai import chat
 
-# Configure the API key and generative model
-api_key = 'Your api key'# Enter you API KEY
+# Check if running in Streamlit Cloud
+is_streamlit_cloud = 'STREAMLIT_SERVER' in os.environ
+
+if is_streamlit_cloud:
+    # Fetch API key from Streamlit secrets
+    api_key = st.secrets["api_key"]
+else:
+    # Load environment variables from .env file
+    from dotenv import load_dotenv
+    load_dotenv()
+    # Fetch API key from environment variables
+    api_key = os.getenv('API_KEY')
+
+# Configure the generative AI model
 genai.configure(api_key=api_key)
 
 generation_config = {
