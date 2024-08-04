@@ -16,10 +16,6 @@ The Stress Detection sysytem offers several key features:
 3. AI Assistant: Somebody provides real-time support and personalized guidance through interactive chat, helping users manage stress effectively.
 4. Feedback System: Users can provide feedback and suggestions for improving the platform.
 
-## Demo
-
-Try out the live demo of the Human-Stress-Detection-System [here](https://human-stress-detection-system-q4mdpbfdgh5dnbkwpssz2w.streamlit.app/).
-
 ## Prerequisites
 Before running the project, ensure you have the following installed:
 
