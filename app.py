@@ -4,7 +4,6 @@ import streamlit as st
 import pickle
 from PIL import Image
 import google.generativeai as genai
-from google.generativeai import chat
 
 # Check if running in Streamlit Cloud
 is_streamlit_cloud = 'STREAMLIT_SERVER' in os.environ
@@ -38,6 +37,15 @@ generation_model = genai.GenerativeModel(
 with open('model/stress_detection.pkl', 'rb') as file:
     reg = pickle.load(file)
 
+# Function to generate personalized suggestions
+def generate_personalized_suggestions(features):
+    # Construct prompt for the generative AI model
+    stress_level = features['stress_level']
+    prompt = f"Given the stress level category '{stress_level}', provide short personalized recommendations and suggestions for stress management based on the following features: {features}."
+    chat_session = generation_model.start_chat(history=[])
+    response = chat_session.send_message(prompt)
+    return response.text.strip()
+    
 # Prediction tab
 def prediction_tab():
     st.title('Stress Level Predictor')
@@ -116,18 +124,26 @@ def prediction_tab():
         else:
             predicted_stress_level = 'High'
 
-        # Display prediction result
+        # Generate personalized suggestions
+        features = {
+            'snoring_rate': selected_sr,
+            'respiration_rate': selected_rr,
+            'body_temperature': selected_t,
+            'limb_movement': selected_lm,
+            'blood_oxygen_level': selected_bo,
+            'rapid_eye_movement': selected_rem,
+            'sleep_hours': selected_sh,
+            'heart_rate': selected_hr,
+            'stress_level': predicted_stress_level
+        }
+        suggestions = generate_personalized_suggestions(features)
+
+        # Display prediction result and suggestions
         st.subheader('Predicted Stress Level:')
-        if predicted_stress_level == 'Low/Normal':
-            st.success("Your stress level is low. Keep taking care of yourself! 🙂")
-        elif predicted_stress_level == 'Medium Low':
-            st.warning("Your stress level is moderate. Take some time to relax and unwind. 😐")
-        elif predicted_stress_level == 'Medium':
-            st.error("Your stress level is high! It's crucial to take steps to reduce it for your well-being! 😞")
-        elif predicted_stress_level == 'Medium High':
-            st.error("Your stress level is critical. Please prioritize your mental and physical health and seek support from loved ones or professionals!! 😫")
-        else:
-            st.success("Congratulations! Your stress level prediction is not available. You seem to be stress-free and calm 😄")
+        st.write(predicted_stress_level)
+        
+        st.subheader('Personalized Suggestions:')
+        st.write(suggestions)
 
         st.markdown(
             """
@@ -136,32 +152,7 @@ def prediction_tab():
             unsafe_allow_html=True,
         )
 
-# Somebody tab
-def ai_interaction(prompt):
-    try:
-        # Check if there is an existing chat session
-        if 'chat_session' not in st.session_state:
-            # Start a new chat session
-            chat_session = generation_model.start_chat()
-            st.session_state.chat_session = chat_session
-        else:
-            chat_session = st.session_state.chat_session
-
-        # Send user prompt and get response
-        response = chat_session.send_message(prompt)
-
-        # Extract the text from the response
-        response_text = response.text.strip()
-
-        # Append response to the history
-        st.session_state.chat_history.append(f"Somebody: {response_text}")
-
-        return response_text
-
-    except Exception as e:
-        return f"An error occurred: {e}"
-
-
+# AI Interaction function
 def ai_interaction(prompt):
     try:
         # Check if there is an existing chat session
@@ -187,7 +178,7 @@ def ai_interaction(prompt):
         st.session_state.chat_history.append(f"Somebody: An error occurred: {e}")
         return f"An error occurred: {e}"
 
-
+# Somebody tab
 def somebody_tab():
     st.title('Somebody: Your AI Assistant')
 
@@ -234,15 +225,47 @@ def somebody_tab():
             ai_response = ai_interaction(user_input)
 
     # Display chat history
-    st.subheader("Chat History:")
+    st.subheader("Chat History")
     for message in st.session_state.chat_history:
-        if message.startswith("You:"):
-            styled_message = f"<div class='chat-message'><span class='chat-label'>You:</span> {message[4:]}</div>"
-        elif message.startswith("Somebody:"):
-            styled_message = f"<div class='chat-message'><span class='chat-label'>Somebody:</span> {message[9:]}</div>"
-        else:
-            styled_message = f"<div class='chat-message'>{message}</div>"
-        st.markdown(styled_message, unsafe_allow_html=True)
+        st.markdown(f"<p class='chat-message'>{message}</p>", unsafe_allow_html=True)
+
+# Feedback tab
+def feedback_tab():
+    st.title('Share Your Thoughts')
+
+    st.markdown(
+        """
+        <style>
+            .stApp {
+                background-color: #DFEAF0;
+                color: black;
+                text-align: justify;
+            }
+            p {
+                font-size: 18px;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+        \nWe'd love to hear your thoughts and suggestions on Stress Detection Explorer! Your feedback helps us improve and enhance the platform to better serve your needs. Whether it's a feature request, bug report, or general comment, we value your input and appreciate your contribution to making Stress Detection Explorer even better.
+
+        \nPlease share your feedback in the form below. Thank you for helping us create a more user-friendly and effective Stress Detection Explorer!
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # Feedback form
+    name = st.text_input("Name:", max_chars=50)
+    email = st.text_input("Email:", max_chars=50)
+    feedback = st.text_area("Please provide your feedback here:", height=200)
+    if st.button("Submit Feedback"):
+        # Process feedback (can be stored in a database or file)
+        st.success(f"Thank you, {name}! We appreciate your feedback. We'll review your input and work towards improving Stress Detection Explorer.")
+
 
 # About tab
 def about_tab():
@@ -266,12 +289,19 @@ def about_tab():
 
     st.markdown(
         """
-        \nThe stress detection model employs a RandomForestClassifier algorithm trained on a dataset containing physiological and environmental features, along with corresponding stress levels. The model learns the underlying patterns and relationships within this data to predict stress levels based on input features.
+        \nOur stress detection model utilizes a RandomForestClassifier, trained on physiological and environmental features to predict stress levels. Key features include:
+        - Snoring Rate
+        - Respiration Rate
+        - Body Temperature
+        - Limb Movement
+        - Blood Oxygen Level
+        - Rapid Eye Movement
+        - Sleep Hours
+        - Heart Rate
 
-        \nThe RandomForestClassifier is a powerful ensemble learning method used for classification tasks. It constructs multiple decision trees during training and outputs the most frequent class (mode) predicted by these trees. This technique enhances accuracy and robustness, making it particularly effective for complex tasks like predicting stress levels based on physiological data. Its ability to handle diverse features and reduce overfitting makes it an ideal choice for building reliable stress detection systems.
+        \nThe RandomForestClassifier is an ensemble learning method that builds multiple decision trees and aggregates their results for accurate predictions. This model helps identify stress levels categorized as Low/Normal, Medium Low, Medium, Medium High, and High, providing valuable insights for effective stress management.
 
-        \nThe prediction process involves inputting physiological and environmental features, such as snorring rate, respiration rate, temperature, limb movement, blood oxygenation, rapid eye movement, heart rate, and sleep duration. The model processes this input to generate a prediction for the stress level, allowing users to explore different scenarios and gain insights into potential stress levels.
-
+        \nExplore our tool to understand and manage your stress levels better. Your well-being is our priority!
         """,
         unsafe_allow_html=True,
     )
@@ -309,60 +339,33 @@ def home_tab():
     
     st.markdown(
         """
-        \nBy providing a user-friendly and intuitive interface, Happify empowers individuals to take proactive measures towards managing their stress effectively, thereby promoting overall well-being and resilience.
+        \nNavigate through the tabs to explore features:
+        \n- **Home:** Get introduced to the system and view the welcome image.
+        \n- **About:** Learn more about how the stress detection model works.
+        \n- **Prediction:** Input your data to get stress level predictions and personalized suggestions.
+        \n- **Somebody:** Chat with the AI assistant for personalized support and guidance.
+        \n- **Feedback:** Share your thoughts and provide feedback to help us improve the system.
+
+        \nStart exploring and take control of your stress management today!
         """,
         unsafe_allow_html=True,
     )
 
-# Feedback tab
-def feedback_tab():
-    st.title('Share Your Thoughts')
+# Main application
+def main():
+    st.sidebar.title("Navigation")
+    selection = st.sidebar.radio("Go to", ["Home", "About", "Prediction", "Somebody", "Feedback"])
 
-    st.markdown(
-        """
-        <style>
-            .stApp {
-                background-color: #DFEAF0;
-                color: black;
-                text-align: justify;
-            }
-            p {
-                font-size: 18px;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    if selection == "Home":
+        home_tab()
+    elif selection == "About":
+        about_tab()
+    elif selection == "Prediction":
+        prediction_tab()
+    elif selection == "Somebody":
+        somebody_tab()
+    elif selection == "Feedback":
+        feedback_tab()
 
-    st.markdown(
-        """
-        \nI'd love to hear your thoughts and suggestions on Stress Detection System! Your feedback helps me improve and enhance the platform to better serve your needs. Whether it's a feature request, bug report, or general comment, we value your input and appreciate your contribution to making Stress Detection System even better.
-
-        \nPlease share your feedback in the form below. Thank you !!
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # Feedback form
-    name = st.text_input("Name:", max_chars=50)
-    email = st.text_input("Email:", max_chars=50)
-    feedback = st.text_area("Please provide your feedback here:", height=200)
-    if st.button("Submit Feedback"):
-        # Process feedback (can be stored in a database or file)
-        st.success(f"Thank you, {name}! We appreciate your feedback. We'll review your input and work towards improving Stress Detection Explorer.")
-
-# Create tabs
-tabs = ["Home", "About", "Stress Level Predictor", "Somebody", "Feedback"]
-selected_tab = st.sidebar.radio("Welcome :)", tabs)
-
-# Show the selected tab
-if selected_tab == "Home":
-    home_tab()
-elif selected_tab == "About":
-    about_tab()
-elif selected_tab == "Feedback":
-    feedback_tab()
-elif selected_tab == "Somebody":
-    somebody_tab()
-else:
-    prediction_tab()
+if __name__ == "__main__":
+    main()
