@@ -13,7 +13,7 @@ The Stress Detection sysytem offers several key features:
 
 1. Predict Stress Levels: Users can input physiological and environmental data to receive predictions about their stress levels.
 2. Explore Scenarios: The platform allows users to experiment with different feature values to explore various stress scenarios.
-3. AI Assistant: Somebody provides real-time support and personalized guidance through interactive chat, helping users manage stress effectively.
+3. AI Assistant: Somebody provides real-time, interactive support and personalized recommendations based on the user's input. The AI assistant offers tailored guidance to help users manage and reduce their stress effectively.
 4. Feedback System: Users can provide feedback and suggestions for improving the platform.
 
 ## Prerequisites
@@ -31,7 +31,7 @@ Run the App: streamlit run app.py
 
 Interact with the App:
 - Navigate to the home tab to view an overview of the app.
-- Use the Stress Level Predictor tab to input feature values and get predictions.
+- Use the Stress Level Predictor tab to input feature values and get predictions and personalized recommendations and suggestions.
 - Engage with the AI Assistant in the "Somebody" tab for personalized support.
 - Provide feedback in the Feedback tab.
 
