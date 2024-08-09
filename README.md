@@ -1,39 +1,52 @@
 # Human-Stress-Detection-System
-The Human-Stress-Detection-System is an interactive platform that predicts stress levels using a RandomForestClassifier algorithm. Users input physiological data such as snoring rate, respiration rate, and heart rate to get personalized stress predictions. The system also provides tailored suggestions for stress management. Additionally, it features Somebody, an AI assistant that offers real-time support and guidance through interactive chat, enhancing the overall user experience in managing stress.
+The Human-Stress-Detection-System is an interactive platform that predicts stress levels using a RandomForestClassifier algorithm. Users input physiological data such as snoring rate, respiration rate, and heart rate to get personalized stress predictions. The system also provides tailored suggestions for stress management. Additionally, it features Somebody, an AI assistant that offers real-time support and guidance through interactive chat, enhancing the overall user experience in managing stress.The system also includes an admin panel for managing feedback stored in an SQLite database.
 
 ## Project Structure
 
-- app.py: Main application script for the Streamlit app.
-- model/: Contains the pre-trained model file (stress_detection.pkl) and the Jupyter notebook (stress_detection.ipynb).
-- images/: Contains image assets used in the application (stress.jpg).
-- requirements.txt: Lists the Python packages required to run the app.
+Human-Stress-Detection-System/
+│
+├── data/                        # Contains dataset files (e.g., dataset.csv)
+├── images/                      # Contains image assets used in the application (e.g., stress.jpg)
+├── model/                       # Contains pre-trained model file (stress_detection.pkl) and Jupyter notebook (stress_detection.ipynb)
+├── visualizations/              # Contains visualizations of important features and data insights
+├── app.py                       # Main application script for the Streamlit app
+├── feedback.py                  # Script for handling feedback
+├── requirements.txt             # Lists the Python packages required to run the app
+└── README.md                    # Project documentation
+
 
 # Features
 The Stress Detection sysytem offers several key features:
 
-1. Predict Stress Levels: Users can input physiological and environmental data to receive predictions about their stress levels.
-2. Explore Scenarios: The platform allows users to experiment with different feature values to explore various stress scenarios.
-3. AI Assistant: Somebody provides real-time, interactive support and personalized recommendations based on the user's input. The AI assistant offers tailored guidance to help users manage and reduce their stress effectively.
-4. Feedback System: Users can provide feedback and suggestions for improving the platform.
+1. Stress Level Prediction: Predicts stress levels based on user-provided data.
+2. Personalized Recommendations: Provides stress management advice tailored to the user.
+3. AI Assistant: Engages with users for interactive support.
+4. Visualizations: Displays key data insights and feature importance.
+5. Feedback System: Collects and stores feedback in an SQLite database.
+6. Admin Panel: Manages and reviews user feedback.
 
 ## Prerequisites
 Before running the project, ensure you have the following installed:
-
-- Python 3.x
-- Streamlit
-- Pandas
-- Scikit-learn
+- pandas
+- streamlit
 - Pillow
 - google-generativeai
+- matplotlib
+- scikit-learn
+- python-dotenv
+- sqlite3
 
 ## Usage
 Run the App: streamlit run app.py
 
-Interact with the App:
-- Navigate to the home tab to view an overview of the app.
-- Use the Stress Level Predictor tab to input feature values and get predictions and personalized recommendations and suggestions.
-- Engage with the AI Assistant in the "Somebody" tab for personalized support.
-- Provide feedback in the Feedback tab.
+Interact with the app:
+- Home: Navigate to the home tab to view an overview of the application.
+- About: Find information about the dataset, model accuracy, and other details.
+- Visualization: Explore visualizations of important features and data insights.
+- Predict: Enter feature values to get stress level predictions, along with personalized recommendations and suggestions.
+- Somebody: Engage with the AI Assistant for interactive and personalized support.
+- Feedback: Provide feedback on your experience and review feedback submissions.
+- Admin: Manage and review user feedback through the admin panel (restricted access).
 
 ## Contact
 For questions or suggestions, please contact yaminibhole20@gmail.com.
