@@ -3,17 +3,16 @@ The Human-Stress-Detection-System is an interactive platform that predicts stres
 
 ## Project Structure
 
-Human-Stress-Detection-System/
-│
-├── data/                        # Contains dataset files (e.g., dataset.csv)
-├── images/                      # Contains image assets used in the application (e.g., stress.jpg)
-├── model/                       # Contains pre-trained model file (stress_detection.pkl) and Jupyter notebook (stress_detection.ipynb)
-├── visualizations/              # Contains visualizations of important features and data insights
-├── app.py                       # Main application script for the Streamlit app
-├── feedback.py                  # Script for handling feedback
-├── requirements.txt             # Lists the Python packages required to run the app
-└── README.md                    # Project documentation
+The project directory is organized as follows:
 
+- data/: Contains dataset files (e.g., dataset.csv).
+- images/: Contains image assets used in the application (e.g., stress.jpg).
+- model/: Contains the pre-trained model file (stress_detection.pkl) and the Jupyter notebook (stress_detection.ipynb).
+- visualizations/: Contains visualizations of important features and data insights.
+- app.py: Main application script for the Streamlit app.
+- feedback.py: Script for handling feedback.
+- requirements.txt: Lists the Python packages required to run the app.
+- README.md: Project documentation.
 
 # Features
 The Stress Detection sysytem offers several key features:
